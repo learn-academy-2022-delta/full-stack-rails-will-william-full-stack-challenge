@@ -4,18 +4,43 @@ class HomeController < ApplicationController
     def index
         @blogs = Blog.all
     end
+
     def show
-        @blogs = Blog.find(params[:id])
-    end
-    def new
-        @blogs = Blog.new
-    end
-    def create
-        @blogs = Blog.new()
+        @blog = Blog.find(params[:id])
     end
 
-    private
-    def blog_params
-        params.require(:blog).permit(:title, :content)
+    def new
+        @blog = Blog.new
     end
+
+    def create
+        @blog = Blog.create(form_params)
+        if @blog.valid?
+            redirect_to blogs_path
+        end
+    end
+
+    def destroy
+        @blog = Blog.find(params[:id])
+        if @blog.destroy
+            redirect_to blogs_path
+        end
+    end
+
+    def edit
+        @blog = Blog.find(params[:id])
+    end
+
+    def update
+        @blog = Blog.find(params[:id])
+        @blog.update(form_params)
+    end
+
+        
+        private
+        def form_params
+            params.require(:blog).permit(:title, :content)
+        end
+    
+   
 end
